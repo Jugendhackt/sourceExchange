@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -47,9 +49,15 @@ class Link
      */
     private $timestamp;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Report", mappedBy="link")
+     */
+    private $reports;
+
     public function __construct()
     {
         $this->timestamp = new \DateTime;
+        $this->reports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -125,6 +133,37 @@ class Link
     public function setTimestamp(\DateTimeInterface $timestamp): self
     {
         $this->timestamp = $timestamp;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Report[]
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports[] = $report;
+            $report->setLink($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): self
+    {
+        if ($this->reports->contains($report)) {
+            $this->reports->removeElement($report);
+            // set the owning side to null (unless already changed)
+            if ($report->getLink() === $this) {
+                $report->setLink(null);
+            }
+        }
 
         return $this;
     }
