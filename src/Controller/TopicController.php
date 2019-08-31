@@ -28,24 +28,22 @@ class TopicController extends AbstractController
     }
 
     /**
- * @Route("/topic/{id}", name="topic_show")
- */
-public function show($id)
-{
-    $topic = $this->getDoctrine()
-        ->getRepository(Topic::class)
-        ->find($id);
+     * @Route("/topic/{id}", name="topic_show")
+     */
+    public function show($id)
+    {
+        $topic = $this->getDoctrine()
+            ->getRepository(Topic::class)
+            ->find($id);
 
-    if (!$topic) {
-        throw $this->createNotFoundException(
-            'No topic found for id '.$id
-        );
+        if (!$topic) {
+            throw $this->createNotFoundException(
+                'No topic found for id '.$id
+            );
+        }
+
+        // or render a template
+        // in the template, print things with {{ product.name }}
+        return $this->render('default/single-view.html.twig', ['topic' => $topic]);
     }
-
-    
-
-    // or render a template
-    // in the template, print things with {{ product.name }}
-    return $this->render('default/single-view.html.twig', ['topic' => $topic]);
-}
 }

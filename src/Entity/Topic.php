@@ -133,4 +133,9 @@ class Topic
 
         return $this;
     }
+
+    public function getSourceCount()
+    {
+        return count($this->getLinks());
+    }
 }

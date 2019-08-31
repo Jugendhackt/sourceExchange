@@ -4,7 +4,7 @@
 
 .card-body{
     max-height: 80vh;
-    overflow: scroll;
+    overflow: auto;
 }
 
 #login-dropdown{
