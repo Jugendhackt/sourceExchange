@@ -12,7 +12,7 @@
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
             <h1 class="my-0 mr-md-auto font-weight-normal"><a id="header-name" href={{ path("index", parameters = [], relative = false) }} class="text-dark text-decoration-none">Source Exchange</a></h1>
             {% if app.user %}
-                <a class="btn btn-outline-success mr-2" href="{{ path('topic_input') }}">Neues Thema</a>
+                <a class="btn btn-outline-success mr-2 mb-2 mb-md-0" href="{{ path('topic_input') }}">Neues Thema</a>
                 <a class="btn btn-outline-danger" href="{{ path('security_logout') }}">Abmelden</a>
             {% else %}
                 <a class="btn btn-outline-primary" href="{{ path('security_login') }}">Anmelden</a>
