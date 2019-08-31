@@ -20,7 +20,7 @@ class TopicController extends AbstractController
      */
     public function index(Topic $topic)
     {
-        dump($topic);
+        //dump($topic);
         return $this->render('topic/index.html.twig', [
             'controller_name' => 'TopicController',
             'topic' => $topic
