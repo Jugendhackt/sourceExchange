@@ -17,21 +17,14 @@
         </h3>
         <div class="card-body">
             <ul class="list-group">
+            {% for topic in topics %}
                 <li class="list-group-item">
-                    <h4 class="topic-main-view">Handelsstreik USA China, betrifft es Deutschland?</h4>
-                    <h6 class="text-muted description-main-view">Der Handelsstreit zwischen den beiden Großmächten China und USA ist in aller Munde, wird dieser Auswirkungen auf Deutschland und andere Länder haben?</h5>
-                    <h6 class="text-muted text-right">6 Quellen</h6>
+                    <a href="{{ path('topic_show', {'id': topic.id}) }}"><h4 class="topic-main-view">{{ topic.title }}</h4></a>
+                    <h6 class="text-muted description-main-view">{{ topic.description }}</h6>
+                    <h6 class="text-muted text-right">{{ topic.sourceCount }} Quelle{% if topic.sourceCount == 1 %}n{% endif %}
+                    </h6>
                 </li>
-                <li class="list-group-item">
-                    <h4 class="topic-main-view">Sind Alpakas auch Menschen?</h4>
-                    <h6 class="text-muted description-main-view">Ja, aber was denkt ihr?</h5>
-                    <h6 class="text-muted text-right">3 Quellen</h6>
-                </li>
-                <li class="list-group-item">
-                    <h4 class="topic-main-view">Der Regenwald brennt!</h4>
-                    <h6 class="text-muted description-main-view">Seit einigen Wochen steht in Brasilien der Regenwald in Flammen. Wie groß ist die Bedrohung, die davon ausgeht und welche Bedeutungen haben die Brände für uns?</h5>
-                    <h6 class="text-muted text-right">5 Quellen</h6>
-                </li>
+            {% endfor %}
             </ul>
         </div>
     </div>
@@ -57,7 +50,7 @@
                     <h6 class="text-muted text-right">5 Quellen</h6>
                 </li>
 
-                
+
             </ul>
         </div>
     </div>
@@ -82,7 +75,7 @@
                         <h6 class="text-muted description-main-view">Der Handelsstreit zwischen den beiden Großmächten China und USA ist in aller Munde, wird dieser Auswirkungen auf Deutschland und andere Länder haben?</h5>
                         <h6 class="text-muted text-right">6 Quellen</h6>
                 </li>
-                
+
             </ul>
         </div>
     </div>

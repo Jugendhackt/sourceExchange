@@ -4,16 +4,12 @@
 
 .card-body{
     max-height: 80vh;
-    overflow: scroll;
+    overflow: auto;
 }
 
 #login-dropdown{
     display: block;
     text-align: end;
-}
-
-.description-main-view{
-    
 }
 
 .topic-main-view{
