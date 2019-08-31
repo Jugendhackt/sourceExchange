@@ -29,8 +29,18 @@ class TopicInputController extends AbstractController
     public function inputTopic(Request $req)
     {
         $form = $this->createFormBuilder()
-            ->add('topic', TextType::class)
-            ->add('description', TextType::class)
+            ->add('topic', TextType::class, [
+                'label' => 'Titel',
+            ])
+            ->add('description', TextType::class, [
+                'label' => 'Beschreibung',
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Thema erstellen',
+                'attr' => [
+                    'class' => 'btn-success btn-block'
+                    ]
+                ])
             ->getForm();
 
         $form->handleRequest($req);
@@ -53,7 +63,7 @@ class TopicInputController extends AbstractController
             $entityManager->persist($newTopic);
             $entityManager->flush();
 
-            return $this->redirectToRoute('topic_input');
+            return $this->redirectToRoute('topic_show', ['id' => $newTopic->getId()]);
 
         }
 

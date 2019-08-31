@@ -102,4 +102,12 @@ class SecurityController extends AbstractController
             'form' => $form,
             'error' => $error]);
     }
+
+    /**
+     * @Route("/security/logout", name="security_logout")
+     */
+    public function logout()
+    {
+
+    }
 }
