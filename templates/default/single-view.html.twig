@@ -1,10 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Source Exchange{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/index.css">
+{% block title %}Source Exchange
 {% endblock %}
 
 {% block body %}
@@ -15,7 +11,46 @@
 
     <div class="container-fluid">
         <div class="row">
-            <h1 id="topic" class="col-md-4 offset-md-4">Handelskrieg zwischen USA und China.</h1>
+            <h1 id="topic" class="col-md-4 offset-md-4">
+                {{ topic.title }}
+            </h1>
+        </div>
+        <div class="row">
+            <p class="text-muted col-md-4 offset-md-4 mt-4">
+                {{ topic.description }}
+            </p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-4 mt-2">
+                <div id="links" class="card">
+                    <div class="card-header">
+                        Links zum Thema
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for link in topic.links %}
+                                <li class="list-group-item">
+                                    <a class="btn btn-link" href="{{ link.href }}" target="_blank">
+                                        {{ link.href }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                            <li class="list-group-item">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="inputLink"></label>
+                                        <input class="form-control" id="inputLink" placeholder="Link eingeben">
+                                    </div>
+                                </form>
+                            </li>
+                            <li class="list-group-item bg-success">
+                                <a class="btn btn-success" href="" target="_blank">
+                                    Link hinzufügen</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

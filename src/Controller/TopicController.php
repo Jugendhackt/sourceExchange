@@ -4,26 +4,48 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Repository\TopicRepository;
 use App\Entity\Topic;
+
 
 class TopicController extends AbstractController
 {
-
-    public function __construct(TopicRepository $topics)
+    /**
+     * @Route("/topic", name="topic")
+     */
+    public function index()
     {
-      $this->topic = $topics;
+        return $this->render('index.html.twig', [
+            'controller_name' => 'TopicController',
+        ]);
     }
 
     /**
-     * @Route("/topic/{topic}", name="topic")
+     * @Route("/mytopics", name="mytopics")
      */
-    public function index(Topic $topic)
+    public function mytopics()
     {
-        dump($topic);
-        return $this->render('topic/index.html.twig', [
-            'controller_name' => 'TopicController',
-            'topic' => $topic
-        ]);
+        return $this->render('default/mytopics.html.twig');
     }
+
+    /**
+ * @Route("/topic/{id}", name="topic_show")
+ */
+public function show($id)
+{
+    $topic = $this->getDoctrine()
+        ->getRepository(Topic::class)
+        ->find($id);
+
+    if (!$topic) {
+        throw $this->createNotFoundException(
+            'No topic found for id '.$id
+        );
+    }
+
+    
+
+    // or render a template
+    // in the template, print things with {{ product.name }}
+    return $this->render('default/single-view.html.twig', ['topic' => $topic]);
+}
 }
