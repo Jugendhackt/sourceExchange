@@ -46,7 +46,7 @@ class Topic
 
     public function __construct()
     {
-        $this->$timestamp = new \DateTime();
+        $this->timestamp = new \DateTime();
         $this->links = new ArrayCollection();
     }
 
