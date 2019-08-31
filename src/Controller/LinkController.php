@@ -38,7 +38,7 @@ class LinkController extends AbstractController
                 ]
             ])
             ->add('description', TextType::class, [
-                'label' => 'Anmerkung',
+                'label' => 'Beschreibung / Anmerkung',
                 'attr' => [
                     'placeholder' => 'Stelle xy ist Fachlich unsauber',
                 ]
