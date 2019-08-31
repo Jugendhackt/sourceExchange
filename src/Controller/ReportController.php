@@ -61,4 +61,15 @@ class ReportController extends AbstractController
             'controller_name' => 'ReportController',
         ]);
     }
+
+    /**
+     * @Route("/report/view/{report}", name="report_view")
+     * @IsGranted("ROLE_MODERATOR")
+     */
+    public function detail(Report $report)
+    {
+        return $this->render('report/view.html.twig', [
+            'report' => $report,
+        ]);
+    }
 }
