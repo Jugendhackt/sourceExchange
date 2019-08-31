@@ -8,7 +8,9 @@ use App\Entity\Topic;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use App\Entity\Link;
+use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType as SymfonyTextType;
 use Symfony\Component\HttpFoundation\Request;
 
 class TopicController extends AbstractController
@@ -55,7 +57,7 @@ class TopicController extends AbstractController
                     'placeholder' => 'Link eingeben',
                 ],
             ])
-            ->add('description', UrlType::class, [
+            ->add('description', SymfonyTextType::class, [
                 'label' => 'Anmerkung',
                 'attr' => [
                     'placeholder' => 'Anmerkung eingeben',
@@ -74,7 +76,7 @@ class TopicController extends AbstractController
         if ($linkForm->isSubmitted() && $linkForm->isValid() && $this->isGranted('ROLE_USER'))
         {
             $link = $linkForm->getNormData();
-            dump($link);
+            $link->setUser($this->getUser());
             $this->em->persist($link);
             $this->em->flush();
         }

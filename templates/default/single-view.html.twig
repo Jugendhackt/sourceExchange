@@ -25,9 +25,11 @@
                         <ul class="list-group">
                             {% for link in topic.links %}
                                 <li class="list-group-item">
-                                    <a class="btn btn-link" href="{{ link.href }}" target="_blank">
+                                    <a class="source-link" href="{{ link.href }}" target="_blank">
                                         {{ link.href }}
-                                    </a> <button type="button" class="btn btn-outline-danger report-button float-right">Melden</button>
+                                    </a>
+                                    <p class="text-muted"> {{ link.description }} </p>
+                                    <button type="button" class="btn btn-outline-danger report-button float-right">Melden</button>
                                 </li>
                             {% endfor %}
                         </ul>

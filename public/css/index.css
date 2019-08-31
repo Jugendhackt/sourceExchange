@@ -36,3 +36,7 @@
 .list-group-item:hover > .report-button {
     opacity: 1;
 }
+
+.source-link:hover {
+    /* text-decoration: none; */
+}
