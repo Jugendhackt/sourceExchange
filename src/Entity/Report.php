@@ -37,6 +37,11 @@ class Report
      */
     private $link;
 
+    public function __construct()
+    {
+        $this->timestamp = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
