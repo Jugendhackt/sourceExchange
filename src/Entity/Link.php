@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\TopicRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\LinkRepository")
  */
-class Topic
+class Link
 {
     /**
      * @ORM\Id()
@@ -19,7 +17,18 @@ class Topic
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Topic", inversedBy="links")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $topic;
+
+    /**
      * @ORM\Column(type="string", length=255)
+     */
+    private $href;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $title;
 
@@ -29,8 +38,7 @@ class Topic
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="topics")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="links")
      */
     private $user;
 
@@ -39,15 +47,9 @@ class Topic
      */
     private $timestamp;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Link", mappedBy="topic", orphanRemoval=true)
-     */
-    private $links;
-
     public function __construct()
     {
-        $this->$timestamp = new \DateTime();
-        $this->links = new ArrayCollection();
+        $this->timestamp = new \DateTime;
     }
 
     public function getId(): ?int
@@ -55,12 +57,36 @@ class Topic
         return $this->id;
     }
 
+    public function getTopic(): ?Topic
+    {
+        return $this->topic;
+    }
+
+    public function setTopic(?Topic $topic): self
+    {
+        $this->topic = $topic;
+
+        return $this;
+    }
+
+    public function getHref(): ?string
+    {
+        return $this->href;
+    }
+
+    public function setHref(string $href): self
+    {
+        $this->href = $href;
+
+        return $this;
+    }
+
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    public function setTitle(string $title): self
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -99,37 +125,6 @@ class Topic
     public function setTimestamp(\DateTimeInterface $timestamp): self
     {
         $this->timestamp = $timestamp;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Link[]
-     */
-    public function getLinks(): Collection
-    {
-        return $this->links;
-    }
-
-    public function addLink(Link $link): self
-    {
-        if (!$this->links->contains($link)) {
-            $this->links[] = $link;
-            $link->setTopic($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLink(Link $link): self
-    {
-        if ($this->links->contains($link)) {
-            $this->links->removeElement($link);
-            // set the owning side to null (unless already changed)
-            if ($link->getTopic() === $this) {
-                $link->setTopic(null);
-            }
-        }
 
         return $this;
     }
