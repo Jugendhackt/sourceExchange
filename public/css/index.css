@@ -12,6 +12,10 @@
     text-align: end;
 }
 
+#header-name{
+    text-decoration: none !important;
+}
+
 .description-main-view{
     
 }
