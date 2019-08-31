@@ -30,21 +30,22 @@
                                     </a>
                                 </li>
                             {% endfor %}
-                            <li class="list-group-item">
-                                <form>
-                                    <div class="form-group">
-                                        <label for="inputLink"></label>
-                                        <input class="form-control" id="inputLink" placeholder="Link eingeben">
-                                    </div>
-                                </form>
-                            </li>
-                            <li class="list-group-item bg-success">
-                                <a class="btn btn-success" href="" target="_blank">
-                                    Link hinzufügen</a>
-                            </li>
                         </ul>
                     </div>
                 </div>
+                {% if is_granted('ROLE_USER') %}
+                    <br>
+                    <div id="links" class="card">
+                        <div class="card-header">
+                            Link hinzufügen
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                {{ form(linkForm) }}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
