@@ -17,7 +17,7 @@
 }
 
 .description-main-view{
-    
+
 }
 
 .topic-main-view{
@@ -26,4 +26,13 @@
 
 .login{
     font-size: 15pt;
+}
+
+.list-group-item > .report-button {
+    opacity: 0;
+    transition: 200ms
+}
+
+.list-group-item:hover > .report-button {
+    opacity: 1;
 }
