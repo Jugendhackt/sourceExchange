@@ -37,6 +37,6 @@
     opacity: 1;
 }
 
-.source-link:hover {
-    /* text-decoration: none; */
+a > h4.topic-main-view {
+    color: black;
 }
