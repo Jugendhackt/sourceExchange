@@ -16,12 +16,22 @@ security:
             security: false
         main:
             anonymous: true
+            switch_user: true
+            form_login:
+                login_path: security_login
+                check_path: security_login
+                username_parameter: "form[email]"
+                password_parameter: "form[password]"
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 2678400 # 1 month in seconds
+                remember_me_parameter: form[remember_me]
+                path:     /
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            provider: app_user_provider
+            logout:
+                path:   /security/logout
+                target: /
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
