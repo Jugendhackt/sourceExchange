@@ -42,13 +42,25 @@ class SecurityController extends AbstractController
         $tmpUser = new User();
 
         $form = $this->createFormBuilder($tmpUser)
-            ->add('email', EmailType::class, ['label' => 'security.email.email', 'attr' => ['placeholder' => 'security.email.email']])
+            ->add('email', EmailType::class, [
+                'label' => 'E-Mail',
+                'attr' => [
+                    'placeholder' => 'hallo@jugendhackt.de'
+                ]])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'first_options' => ['label' => 'security.password', 'attr' => ['placeholder' => 'security.password']],
-                'second_options' => ['label' => 'security.repeat-password', 'attr' => ['placeholder' => 'security.repeat-password']],
+                'first_options' => [
+                    'label' => 'Passwort'
+                ],
+                'second_options' => [
+                    'label' => 'Passwort wiederholen',
+                ],
                 ])
-            ->add('register', SubmitType::class, ['label' => 'security.register', 'attr' => ['class' => 'btn-success btn-block']])
+            ->add('register', SubmitType::class, [
+                'label' => 'Registrieren',
+                'attr' => [
+                    'class' => 'btn-success btn-block'
+                    ]])
             ->getForm();
 
         $form->handleRequest($request);
