@@ -9,6 +9,7 @@ use App\Entity\Report;
 use App\Entity\Topic;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -106,6 +107,78 @@ class ReportController extends AbstractController
             'report' => $report,
         ]);
     }
+
+    /**
+     * @IsGranted("ROLE_MODERATOR")
+     * @Route("/report/decide/{report}", name="report_decide")
+     */
+    public function decide(Report $report, Request $request)
+    {
+        $approve = (bool) $request->query->get('approve');
+
+        if (!$approve)
+        {
+            $this->em->remove($report);
+            $this->em->flush();
+            $this->addFlash('success', 'Beschwerde wurde erfolgreich gelöscht');
+            return $this->redirectToRoute('index');
+        }
+
+        $form = $this->createFormBuilder([])
+            ->add('confirm', CheckboxType::class, [
+                'required' => false,
+                'label' => 'Gemeldeten Inhalt wirklich löschen',
+                'help' => 'Damit wird der gemeldete Topic bzw. Link undiwederbringlich gelöscht',
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'Absenden',
+                'attr' => [
+                    'class' => 'btn btn-block btn-danger'
+                ]
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $formData = $form->getNormData();
+            if ($formData['confirm'])
+            {
+                if ($report->getLink() !== null)
+                {
+                    $this->em->remove($report->getLink());
+                }
+                else
+                {
+                    foreach ($report->getTopic()->getLinks() as $link)
+                    {
+                        $this->em->remove($link);
+                    }
+                    $this->em->remove($report->getTopic());
+                    $this->em->flush();
+                }
+
+                $this->addFlash('success', 'Beschwerde wurde erfolgreich gelöscht');
+            }
+            else
+            {
+                $this->addFlash('warning', 'Die Beschwerde wurde nicht gelöscht');
+                return $this->redirectToRoute('report_view', [
+                    'report' => $report->getId(),
+                ]);
+            }
+
+            return $this->redirectToRoute('index');
+        }
+
+        $form = $form->createView();
+
+        return $this->render('report/decide.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
 
     private function _generateReportForm(?Topic $topic = null, ?Link $link = null)
     {

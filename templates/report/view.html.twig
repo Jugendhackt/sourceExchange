@@ -20,7 +20,6 @@
                 {% else %}
                     <td>Link</td>
                 {% endif %}
-
             </tr>
             <tr>
                 <td>Gemeldeter User</td>
@@ -50,11 +49,29 @@
                     <td><a href="{{ report.link.href }}" target="_blank">{{ report.link.href }}</a></td>
                 </tr>
             {% endif %}
+            <tr>
+                <td>Anmerkung zur Beschwerde</td>
+                <td>{{ report.description }}</td>
+            </tr>
         </tbody>
     </table>
     <div class="row">
-        <div class="col-12 col-md-6 mb-2 mb-md-0"><a href="" class="btn-primary btn-lg btn-block">fdafad</a></div>
-        <div class="col-12 col-md-6"><a href="" class="btn-primary btn-lg btn-block">fadadf</a></div>
+        <div class="col-12 col-md-6 mb-2 mb-md-0">
+            <a
+                href="{{ path('report_decide', {'report': report.id, 'approve': true}) }}"
+                class="btn-danger btn-lg btn-block text-center"
+            >
+                Gemeldeten Inhalt löschen
+            </a>
+        </div>
+        <div class="col-12 col-md-6">
+            <a
+                href="{{ path('report_decide', {'report': report.id, 'approve': false}) }}"
+                class="btn-success btn-lg btn-block text-center"
+            >
+                Beschwerde löschen und Inhalte behalten
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}
