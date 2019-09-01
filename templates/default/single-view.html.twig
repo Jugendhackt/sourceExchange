@@ -25,6 +25,7 @@
                         <ul class="list-group">
                             {% for link in topic.links %}
                                 <li class="list-group-item">
+                                    <img src={{"https://www.google.com/s2/favicons?domain=" ~ link.href }} class="float-right">
                                     <a class="source-link" href="{{ link.href }}" target="_blank">
                                         {{ link.href }}
                                     </a>
