@@ -1,3 +1,3 @@
 # sourceExchange
 
-Ein JugendHackt Projekt für den austausch von Quellen zu Politischen themen
+Ein JugendHackt Projekt für den Austausch von Quellen zu politischen Themen
