@@ -28,8 +28,14 @@
                                     <a class="source-link" href="{{ link.href }}" target="_blank">
                                         {{ link.href }}
                                     </a>
-                                    <p class="text-muted"> {{ link.description }} </p>
-                                    <button type="button" class="btn btn-outline-danger report-button float-right">Melden</button>
+                                    <p class="text-muted">
+                                        {{ link.description }}
+                                    </p>
+                                    {% if app.user %}
+                                        <a class="btn btn-outline-danger report-button float-right" href="{{ url('report_link', {'link': link.id }) }}">
+                                            Melden
+                                        </a>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </ul>
@@ -37,7 +43,7 @@
                 </div>
             </div>
             {% if is_granted('ROLE_USER') %}
-            <div class="col-12 col-md-6">
+                <div class="col-12 col-md-6">
                     <div id="links" class="card">
                         <div class="card-header">
                             Link hinzufügen
@@ -45,11 +51,11 @@
                         <div class="card-body">
                             <ul class="list-group">
                                 {{ form(linkForm) }}
-                            </ul>
+                                </ul>
+                            </div>
                         </div>
                     </div>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}

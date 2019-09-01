@@ -19,7 +19,7 @@ class ReportController extends AbstractController
 
     /**
      * @IsGranted("ROLE_USER")
-     * @Route("/report/new/topic/{topic}")
+     * @Route("/report/new/topic/{topic}", name="report_topic")
      */
     public function newReportFromTopic(Topic $topic)
     {
@@ -29,14 +29,16 @@ class ReportController extends AbstractController
         $this->em->persist($report);
         $this->em->flush();
 
+        $this->addFlash('success', 'Meldung wurde erfolgreich erstellt');
+
         return $this->redirectToRoute('topic_show', [
-            'topic' => $topic
+            'id' => $topic->getId()
         ]);
     }
 
     /**
      * @IsGranted("ROLE_USER")
-     * @Route("/report/new/link/{link}")
+     * @Route("/report/new/link/{link}", name="report_link")
      */
     public function newReportFromLink(Link $link)
     {
@@ -46,8 +48,10 @@ class ReportController extends AbstractController
         $this->em->persist($report);
         $this->em->flush();
 
+        $this->addFlash('success', 'Meldung wurde erfolgreich erstellt');
+
         return $this->redirectToRoute('topic_show', [
-            'topic' => $link->getTopic(),
+            'id' => $link->getTopic()->getId(),
         ]);
     }
 
