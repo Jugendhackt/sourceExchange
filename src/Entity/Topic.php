@@ -51,7 +51,7 @@ class Topic
 
     public function __construct()
     {
-        $this->$timestamp = new \DateTime();
+        $this->timestamp = new \DateTime();
         $this->links = new ArrayCollection();
         $this->reports = new ArrayCollection();
     }
@@ -169,5 +169,10 @@ class Topic
         }
 
         return $this;
+    }
+
+    public function getSourceCount()
+    {
+        return count($this->getLinks());
     }
 }
