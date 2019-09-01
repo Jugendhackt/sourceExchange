@@ -9,7 +9,8 @@
 {% block title %}Meldung Nr. {{ report.id }} {% endblock %}
 
 {% block body %}
-    <h1>Beschwerde #{{ report.id }} <h1>
+<div class="container">
+    <h1 class="text-center mb-3">Beschwerde #{{ report.id }} </h1>
     <table class="table">
         <tbody>
             <tr>
@@ -29,22 +30,19 @@
                 <td>Gemeldet von</td>
                 <td>{{ report.user.email }} (#{{ report.user.id }})</td>
             </tr>
-            {% if report.topic is not null %}
+            <tr>
+                <td>Themen-Titel</td>
+                <td>
+                    <a href="{{ path('topic_show', {'id': report.topic.id}) }}">{{ report.topic.title }}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Themen-Beschreibung</td>
+                <td>{{ report.topic.description }}</td>
+            </tr>
+            {% if report.link is not null %}
                 <tr>
-                    <td>Titel</td>
-                    <td>{{ report.topic.title }}</td>
-                </tr>
-                <tr>
-                    <td>Beschreibung</td>
-                    <td>{{ report.topic.description }}</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td>Titel</td>
-                    <td>{{ report.link.title }}</td>
-                </tr>
-                <tr>
-                    <td>Beschreibung</td>
+                    <td>Link-Beschreibung</td>
                     <td>{{ report.link.description }}</td>
                 </tr>
                 <tr>
@@ -55,7 +53,8 @@
         </tbody>
     </table>
     <div class="row">
-        <div class="col-12 col-md-6"><a href="" class="btn-primary btn-lg btn-block">fdafad</a></div>
+        <div class="col-12 col-md-6 mb-2 mb-md-0"><a href="" class="btn-primary btn-lg btn-block">fdafad</a></div>
         <div class="col-12 col-md-6"><a href="" class="btn-primary btn-lg btn-block">fadadf</a></div>
     </div>
+</div>
 {% endblock %}
