@@ -16,7 +16,11 @@
             {% endif %}
           {{ form(form) }}
           <div class="text-center text-muted">
+          {% if route == 'security_login' %}
             <a href="{{ path('security_signup') }}">Registrieren</a>
+          {% else %}
+            <a href="{{ path('security_login') }}">Anmelden</a>
+          {% endif %}
           </div>
         </div>
       </div>
