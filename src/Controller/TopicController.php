@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Topic;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use App\Entity\Link;
 use App\Entity\TopicUser;
@@ -13,6 +14,7 @@ use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType as SymfonyTextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class TopicController extends AbstractController
 {
@@ -50,7 +52,7 @@ class TopicController extends AbstractController
 
         $topicUsername = $this->getDoctrine()
             ->getRepository(TopicUser::Class)
-            ->findOneBy(['user' => $this->getUser()->getId(), 'topic_id' => $topic->getId()]);
+            ->findOneBy(['user' => $topic->getUser()->getId(), 'topic_id' => $topic->getId()]);
 
         $link = new Link();
         $link->setTopic($topic);
@@ -68,7 +70,7 @@ class TopicController extends AbstractController
             ->add('href', UrlType::class, [
                 'label' => 'Link hinzufügen',
                 'attr' => [
-                    'placeholder' => 'Link eingeben',
+                    'placeholder' => 'Neuer Link',
                 ],
             ])
             ->add('description', SymfonyTextType::class, [
@@ -76,6 +78,19 @@ class TopicController extends AbstractController
                 'attr' => [
                     'placeholder' => 'Anmerkung eingeben',
                 ],
+            ])
+            ->add('Tags', ChoiceType::class, [
+                'choices'  => [
+                    /*'Neutral 😐' => null,
+                    'Informativ 😮' => true,*/
+                    'Seriös 🧐' => false,
+                    'Kontrovers 🤨' => false,
+                    'Interessant 🤔' => false,
+                    'Lustig 🤣 ' => false,
+                ],
+                'expanded' => true,
+                'multiple' => true,
+                'mapped' => false
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Link hinzufügen',
