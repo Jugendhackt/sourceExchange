@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Source Exchange{% endblock %}
+{% block title %}Source Exchange
+{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -8,50 +9,54 @@
 {% endblock %}
 
 {% block body %}
-<div id="feeds" class="container mt-4">
-    {# <div id="feed-wrapper"></div> #}
-    <div class="card-deck">
-        <div id="aktuell" class="card">
-            <h3 class="card-header text-white bg-primary">
-                Neueste Themen
-            </h3>
-            <div class="card-body">
-                <ul class="list-group">
-                {% for topic in topics %}
-                    <li class="list-group-item">
-                        <a href="{{ path('topic_show', {'id': topic.id}) }}"><h4 class="topic-main-view">{{ topic.title }}</h4></a>
-                        <h6 class="text-muted description-main-view">{{ topic.description }}</h6>
-                        <h6 class="text-muted text-right">{{ topic.sourceCount }} Quelle{% if topic.sourceCount == 1 %}n{% endif %}
-                        </h6>
-                    </li>
-                {% endfor %}
-                </ul>
+    <div
+        id="feeds" class="container mt-4">
+        {# <div id="feed-wrapper"></div> #}
+        <div class="card-deck">
+            <div id="new" class="card">
+                <h3 class="card-header text-white bg-primary">
+                    Neueste Themen
+                </h3>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for topic in topics %}
+                            <li class="list-group-item">
+                                <a href="{{ path('topic_show', {'id': topic.id}) }}">
+                                    <h4 class="topic-main-view">{{ topic.title }}</h4>
+                                </a>
+                                <h6 class="text-muted description-main-view">{{ topic.description }}</h6>
+                                <h6 class="text-muted text-right">{{ topic.sourceCount }}
+                                    Quelle
+                                    {% if topic.sourceCount == 1 %}n
+                                    {% endif %}
+                                </h6>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div id="popular" class="card" border-color="#0E0F0E">
+                <h3 class="card-header text-white bg-primary">
+                    Populäre Themen
+                </h3>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for topic in popularTopics %}
+                            <li class="list-group-item">
+                                <a href="{{ path('topic_show', {'id': topic.id}) }}">
+                                    <h4 class="topic-main-view">{{ topic.title }}</h4>
+                                </a>
+                                <h6 class="text-muted description-main-view">{{ topic.description }}</h6>
+                                <h6 class="text-muted text-right">{{ topic.sourceCount }}
+                                    Quelle
+                                    {% if topic.sourceCount == 1 %}n
+                                    {% endif %}
+                                </h6>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
-    <div id="popular" class="card" border-color="#0E0F0E">
-        <h3 class="card-header text-white bg-primary">
-            Populäre Themen
-        </h3>
-        <div class="card-body">
-            <ul class="list-group">
-                 <li class="list-group-item">
-                    <h4 class="topic-main-view">Sind Alpakas auch Menschen?</h4>
-                    <h6 class="text-muted description-main-view">Ja, aber was denkt ihr?</h5>
-                    <h6 class="text-muted text-right">3 Quellen</h6>
-                    </li>
-                <li class="list-group-item">
-                        <h4 class="topic-main-view">Handelsstreik USA China, betrifft es Deutschland?</h4>
-                        <h6 class="text-muted description-main-view">Der Handelsstreit zwischen den beiden Großmächten China und USA ist in aller Munde, wird dieser Auswirkungen auf Deutschland und andere Länder haben?</h5>
-                        <h6 class="text-muted text-right">6 Quellen</h6>
-                </li>
-                <li class="list-group-item">
-                    <h4 class="topic-main-view">Der Regenwald brennt!</h4>
-                    <h6 class="text-muted description-main-view">Seit einigen Wochen steht in Brasilien der Regenwald in Flammen. Wie groß ist die Bedrohung, die davon ausgeht und welche Bedeutungen haben die Brände für uns?</h5>
-                    <h6 class="text-muted text-right">5 Quellen</h6>
-                </li>
-            </ul>
-        </div>
     </div>
-</div>
-</div>
 {% endblock %}
