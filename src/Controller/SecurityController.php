@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,9 +17,10 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
 {
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, UserRepository $users)
     {
         $this->em = $em;
+        $this->users = $users;
     }
 
     /**
@@ -65,10 +67,18 @@ class SecurityController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $formData = $form->getNormData();
             $user = new User();
+
+            if ($this->users->findOneBy(['email' => $formData->getEmail()]) !== null)
+            {
+                $form = $form->createView();
+                $this->addFlash('danger', 'Diese E-Mail Adresse wird bereits verwendet');
+                return $this->render('security/login.html.twig', compact('form'));
+            }
+
             $user->setEmail($formData->getEmail());
             $user->setPassword($passwordEncoder->encodePassword($user, $formData->getPassword()));
             $this->em->persist($user);

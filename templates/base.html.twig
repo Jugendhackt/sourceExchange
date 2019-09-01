@@ -20,6 +20,28 @@
                 <a class="btn btn-outline-primary" href="{{ path('security_login') }}">Anmelden</a>
             {% endif %}
         </div>
+        <div class="container">
+            {% for message in app.flashes('danger') %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('warning') %}
+                <div class="alert alert-warning" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('successRaw') %}
+                <div class="alert alert-success" role="alert">
+                    {{ message|raw }}
+                </div>
+            {% endfor %}
+        </div>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
