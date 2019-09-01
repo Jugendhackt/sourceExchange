@@ -50,7 +50,7 @@ class TopicController extends AbstractController
 
         $topicUsername = $this->getDoctrine()
             ->getRepository(TopicUser::Class)
-            ->find($this->getUser());
+            ->findOneBy(['user' => $this->getUser()->getId(), 'topic_id' => $topic->getId()]);
 
         $link = new Link();
         $link->setTopic($topic);
@@ -113,6 +113,8 @@ class TopicController extends AbstractController
         }
 
         $linkForm = $linkForm->createView();
+
+        dump($topicUsername);
 
         // or render a template
         // in the template, print things with {{ product.name }}
