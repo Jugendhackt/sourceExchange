@@ -19,9 +19,16 @@ class DefaultController extends AbstractController
     public function index()
     {
         $topics = $this->topics->findBy([], ['timestamp' => 'ASC']);
+        $popularTopics = $this->topics->getTopicsFromLastWeek();
+        dump($popularTopics);
+        usort($popularTopics, function ($a, $b)
+        {
+            return $a->getSourceCount() < $b->getSourceCount();
+        });
 
         return $this->render('default/index.html.twig', [
             'topics' => $topics,
+            'popularTopics' => $popularTopics
         ]);
     }
 
