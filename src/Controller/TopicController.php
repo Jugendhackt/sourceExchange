@@ -50,7 +50,10 @@ class TopicController extends AbstractController
 
         $topicUsername = $this->getDoctrine()
             ->getRepository(TopicUser::Class)
-            ->findOneBy(['user' => $this->getUser()->getId(), 'topic_id' => $topic->getId()]);
+            ->findOneBy([
+                'user' => $topic->getUser()->getId(),
+                'topic_id' => $topic->getId()]
+            );
 
         $link = new Link();
         $link->setTopic($topic);
