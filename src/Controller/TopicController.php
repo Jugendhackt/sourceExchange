@@ -8,10 +8,7 @@ use App\Entity\Topic;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use App\Entity\Link;
-<<<<<<< HEAD
 use App\Entity\TopicUser;
-=======
->>>>>>> develop
 use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType as SymfonyTextType;
@@ -51,7 +48,6 @@ class TopicController extends AbstractController
             ->getRepository(Topic::class)
             ->find($id);
 
-<<<<<<< HEAD
         $topicUsername = $this->getDoctrine()
             ->getRepository(TopicUser::Class)
             ->find($this->getUser());
@@ -60,17 +56,14 @@ class TopicController extends AbstractController
         $link->setTopic($topic);
 
 
-        $preAliasList = array("Super","Ultra","xXpro","CatLover","Destroyer");
-        $postAliasList = array("LP","GamerXx","99","Alpaka","42");
+        $preAliasList = array("Super","Ultra","xXpro","CatLover","Destroyer","Paul","Ben","Dracula",
+                                "Infinity","Valkon","Snow");
+        $postAliasList = array("LP","GamerXx","99","Alpaka","42","Racer","Dangerous","Snicker",
+                                "Forest","Ninja","Dragon");
 
         $userAlias = new TopicUser();
         $userAlias->setTopicId($topic);
 
-=======
-        $link = new Link();
-        $link->setTopic($topic);
-
->>>>>>> develop
         $linkForm = $this->createFormBuilder($link)
             ->add('href', UrlType::class, [
                 'label' => 'Link hinzufügen',
@@ -100,12 +93,11 @@ class TopicController extends AbstractController
             $link->setUser($this->getUser());
             $this->em->persist($link);
             $this->em->flush();
-<<<<<<< HEAD
 
             if ($topicUsername == null)
             {
-                $pre = mt_rand(0,4);
-                $post = mt_rand(0,4);
+                $pre = mt_rand(0,10);
+                $post = mt_rand(0,10);
                 
                 $topicUsername = "$preAliasList[$pre]$postAliasList[$post]";
                 $userAlias->setUser($this->getUser());
@@ -113,8 +105,6 @@ class TopicController extends AbstractController
                 $this->em->persist($userAlias);
                 $this->em->flush();
             }
-=======
->>>>>>> develop
         }
         if (!$topic) {
             throw $this->createNotFoundException(
@@ -129,6 +119,7 @@ class TopicController extends AbstractController
         return $this->render('default/single-view.html.twig', [
             'topic' => $topic,
             'linkForm' => $linkForm,
+            'TopicUser' => $topicUsername,
         ]);
     }
 }
