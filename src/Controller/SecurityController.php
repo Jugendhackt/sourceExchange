@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,9 +17,10 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
 {
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, UserRepository $users)
     {
         $this->em = $em;
+        $this->users = $users;
     }
 
     /**
@@ -42,21 +44,41 @@ class SecurityController extends AbstractController
         $tmpUser = new User();
 
         $form = $this->createFormBuilder($tmpUser)
-            ->add('email', EmailType::class, ['label' => 'security.email.email', 'attr' => ['placeholder' => 'security.email.email']])
+            ->add('email', EmailType::class, [
+                'label' => 'E-Mail',
+                'attr' => [
+                    'placeholder' => 'hallo@jugendhackt.de'
+                ]])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'first_options' => ['label' => 'security.password', 'attr' => ['placeholder' => 'security.password']],
-                'second_options' => ['label' => 'security.repeat-password', 'attr' => ['placeholder' => 'security.repeat-password']],
+                'first_options' => [
+                    'label' => 'Passwort'
+                ],
+                'second_options' => [
+                    'label' => 'Passwort wiederholen',
+                ],
                 ])
-            ->add('register', SubmitType::class, ['label' => 'security.register', 'attr' => ['class' => 'btn-success btn-block']])
+            ->add('register', SubmitType::class, [
+                'label' => 'Registrieren',
+                'attr' => [
+                    'class' => 'btn-success btn-block'
+                    ]])
             ->getForm();
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $formData = $form->getNormData();
             $user = new User();
+
+            if ($this->users->findOneBy(['email' => $formData->getEmail()]) !== null)
+            {
+                $form = $form->createView();
+                $this->addFlash('danger', 'Diese E-Mail Adresse wird bereits verwendet');
+                return $this->render('security/login.html.twig', compact('form'));
+            }
+
             $user->setEmail($formData->getEmail());
             $user->setPassword($passwordEncoder->encodePassword($user, $formData->getPassword()));
             $this->em->persist($user);
@@ -101,5 +123,13 @@ class SecurityController extends AbstractController
         [
             'form' => $form,
             'error' => $error]);
+    }
+
+    /**
+     * @Route("/security/logout", name="security_logout")
+     */
+    public function logout()
+    {
+
     }
 }

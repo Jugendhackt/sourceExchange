@@ -8,7 +8,10 @@ use App\Entity\Topic;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use App\Entity\Link;
+<<<<<<< HEAD
 use App\Entity\TopicUser;
+=======
+>>>>>>> develop
 use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType as SymfonyTextType;
@@ -48,6 +51,7 @@ class TopicController extends AbstractController
             ->getRepository(Topic::class)
             ->find($id);
 
+<<<<<<< HEAD
         $topicUsername = $this->getDoctrine()
             ->getRepository(TopicUser::Class)
             ->find($this->getUser());
@@ -62,6 +66,11 @@ class TopicController extends AbstractController
         $userAlias = new TopicUser();
         $userAlias->setTopicId($topic);
 
+=======
+        $link = new Link();
+        $link->setTopic($topic);
+
+>>>>>>> develop
         $linkForm = $this->createFormBuilder($link)
             ->add('href', UrlType::class, [
                 'label' => 'Link hinzufügen',
@@ -91,6 +100,7 @@ class TopicController extends AbstractController
             $link->setUser($this->getUser());
             $this->em->persist($link);
             $this->em->flush();
+<<<<<<< HEAD
 
             if ($topicUsername == null)
             {
@@ -103,6 +113,8 @@ class TopicController extends AbstractController
                 $this->em->persist($userAlias);
                 $this->em->flush();
             }
+=======
+>>>>>>> develop
         }
         if (!$topic) {
             throw $this->createNotFoundException(

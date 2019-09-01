@@ -3,17 +3,27 @@
 {% block title %}Log In{% endblock %}
 
 {% block stylesheets %}
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  {{ parent() }}
   <link rel="stylesheet" href="/css/login.css">
 {% endblock %}
 
 {% block body %}
     <div class="container-fluid">
-    <div class="row justify-content-center">
-    <div class="col-4 mt-5">
-    {{ form(form) }}
+      <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6">
+          {% if error is defined and error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+          {{ form(form) }}
+          <div class="text-center text-muted">
+          {% if route == 'security_login' %}
+            <a href="{{ path('security_signup') }}">Registrieren</a>
+          {% else %}
+            <a href="{{ path('security_login') }}">Anmelden</a>
+          {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
-    </div>
-    </div>
-    
+
 {% endblock %}

@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Source Exchange{% endblock %}
+{% block title %}Source Exchange
+{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -8,71 +9,58 @@
 {% endblock %}
 
 {% block body %}
-<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto font-weight-normal">Source Exchange</h5>
-        <a class="btn btn-outline-primary" href="#">Anmelden</a>
-</div>
-
-<div id="feeds" class="container-fluid">
-    <div id="feed-wrapper"></div>
-    <div class="card-deck">
-    <div id="aktuell" class="card">
-        <div class="card-header">
-            Aktuelle Themen
-        </div>
-        <div class="card-body">
-            <ul class="list-group">
-                <li class="list-group-item active">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur </li>
-                <li class="list-group-item">Vestibulum at eros</li>
-                <li class="list-group-item active">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-                <li class="list-group-item active">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-                <li class="list-group-item active">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
-        </div>
-    </div>
-    <div id="popular" class="card">
-        <div class="card-header">
-            Populär
-        </div>
-        <div class="card-body">
-            <ul class="list-group">
-                <li class="list-group-item active">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
-        </div>
-    </div>
-    <div id="latest" class="card">
-        <div class="card-header">
-            Neueste
-        </div>
-        <div class="card-body">
-            <ul class="list-group">
-                <li class="list-group-item active">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
+    <div
+        id="feeds" class="container mt-4">
+        {# <div id="feed-wrapper"></div> #}
+        <div class="card-deck">
+            <div id="new" class="card">
+                <h3 class="card-header text-white bg-primary">
+                    Neueste Themen
+                </h3>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for topic in topics %}
+                            <li class="list-group-item">
+                                <a href="{{ path('topic_show', {'id': topic.id}) }}">
+                                    <h4 class="topic-main-view">{{ topic.title }}</h4>
+                                </a>
+                                <h6 class="text-muted description-main-view">{{ topic.description }}</h6>
+                                <h6 class="text-muted text-right">{{ topic.sourceCount }}
+                                    {% if topic.sourceCount == 1 %}
+                                    Quelle
+                                    {% else %}
+                                    Quellen
+                                    {% endif %}
+                                </h6>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div id="popular" class="card" border-color="#0E0F0E">
+                <h3 class="card-header text-white bg-primary">
+                    Populäre Themen
+                </h3>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for topic in popularTopics %}
+                            <li class="list-group-item">
+                                <a href="{{ path('topic_show', {'id': topic.id}) }}">
+                                    <h4 class="topic-main-view">{{ topic.title }}</h4>
+                                </a>
+                                <h6 class="text-muted description-main-view">{{ topic.description }}</h6>
+                                <h6 class="text-muted text-right">{{ topic.sourceCount }}
+                                    {% if topic.sourceCount == 1 %}
+                                    Quelle
+                                    {% else %}
+                                    Quellen
+                                    {% endif %}
+                                </h6>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
 {% endblock %}
