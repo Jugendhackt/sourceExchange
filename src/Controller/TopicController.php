@@ -48,6 +48,12 @@ class TopicController extends AbstractController
             ->getRepository(Topic::class)
             ->find($id);
 
+        if (!$topic) {
+            throw $this->createNotFoundException(
+                'No topic found for id '.$id
+            );
+        }
+
         $topicUsername = $this->getDoctrine()
             ->getRepository(TopicUser::Class)
             ->findOneBy([
@@ -96,28 +102,23 @@ class TopicController extends AbstractController
             $link->setUser($this->getUser());
             $this->em->persist($link);
             $this->em->flush();
-
-            if ($topicUsername == null)
-            {
-                $pre = mt_rand(0,10);
-                $post = mt_rand(0,10);
-                
-                $topicUsername = "$preAliasList[$pre]$postAliasList[$post]";
-                $userAlias->setUser($this->getUser());
-                $userAlias->setUsername($topicUsername);
-                $this->em->persist($userAlias);
-                $this->em->flush();
-            }
-        }
-        if (!$topic) {
-            throw $this->createNotFoundException(
-                'No topic found for id '.$id
-            );
         }
 
         $linkForm = $linkForm->createView();
 
         dump($topicUsername);
+
+        if ($topicUsername == null)
+        {
+            $pre = mt_rand(0,10);
+            $post = mt_rand(0,10);
+
+            $topicUsername = $preAliasList[$pre] . ' ' . $postAliasList[$post];
+            $userAlias->setUser($topic->getUser());
+            $userAlias->setUsername($topicUsername);
+            $this->em->persist($userAlias);
+            $this->em->flush();
+        }
 
         // or render a template
         // in the template, print things with {{ product.name }}
