@@ -1,0 +1,42 @@
+#feed-wrapper{
+    margin: 1vw;
+}
+
+.card-body{
+    max-height: 80vh;
+    overflow: auto;
+}
+
+#login-dropdown{
+    display: block;
+    text-align: end;
+}
+
+#header-name{
+    text-decoration: none !important;
+}
+
+.description-main-view{
+
+}
+
+.topic-main-view{
+    font-weight: bold;
+}
+
+.login{
+    font-size: 15pt;
+}
+
+.list-group-item > .report-button {
+    opacity: 0;
+    transition: 200ms
+}
+
+.list-group-item:hover > .report-button {
+    opacity: 1;
+}
+
+a > h4.topic-main-view {
+    color: black;
+}

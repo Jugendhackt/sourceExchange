@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Source Exchange
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-12">
+                <h1 id="topic" class="text-center">
+                    {{ topic.title }}
+                </h1>
+                <div class="col-12 text-muted text-center">
+                    {{ topic.description }}
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2 justify-content-center">
+            <div class="col-12 col-md-6">
+                <div id="links" class="card">
+                    <div class="card-header">
+                        Links zum Thema
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for link in topic.links %}
+                                <li class="list-group-item">
+                                    <a class="source-link" href="{{ link.href }}" target="_blank">
+                                        {{ link.href }}
+                                    </a>
+                                    <p class="text-muted"> {{ link.description }} </p>
+                                    <button type="button" class="btn btn-outline-danger report-button float-right">Melden</button>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% if is_granted('ROLE_USER') %}
+            <div class="col-12 col-md-6">
+                    <div id="links" class="card">
+                        <div class="card-header">
+                            Link hinzufügen
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                {{ form(linkForm) }}
+                            </ul>
+                        </div>
+                    </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
