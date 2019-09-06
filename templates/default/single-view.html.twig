@@ -30,7 +30,11 @@
                                         {{ link.href }}
                                     </a>
                                     <p class="text-muted"> {{ link.description }} </p>
-                                    <p class="text-muted"> {{ TopicUser.username }}</p>
+                                    {% if TopicUser.username is defined %}
+                                        <p class="text-muted">Von {{ TopicUser.username }}</p>
+                                    {% else %}
+                                        <p class="text-muted">Von {{ TopicUser }}</p>
+                                    {% endif %}
                                     <button type="button" class="btn btn-outline-danger report-button float-right">Melden</button>
                                 </li>
                             {% endfor %}
@@ -40,16 +44,16 @@
             </div>
             {% if is_granted('ROLE_USER') %}
             <div class="col-12 col-md-6">
-                    <div id="links" class="card">
-                        <div class="card-header">
-                            Link hinzufügen
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group">
-                                {{ form(linkForm) }}
-                            </ul>
-                        </div>
+                <div id="links" class="card">
+                    <div class="card-header">
+                        Neuer Link
                     </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {{ form(linkForm) }}
+                        </ul>
+                    </div>
+                </div>
             </div>
             {% endif %}
         </div>
