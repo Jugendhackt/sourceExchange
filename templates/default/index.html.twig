@@ -26,8 +26,10 @@
                                 </a>
                                 <h6 class="text-muted description-main-view">{{ topic.description }}</h6>
                                 <h6 class="text-muted text-right">{{ topic.sourceCount }}
+                                    {% if topic.sourceCount == 1 %}
                                     Quelle
-                                    {% if topic.sourceCount == 1 %}n
+                                    {% else %}
+                                    Quellen
                                     {% endif %}
                                 </h6>
                             </li>
@@ -48,8 +50,10 @@
                                 </a>
                                 <h6 class="text-muted description-main-view">{{ topic.description }}</h6>
                                 <h6 class="text-muted text-right">{{ topic.sourceCount }}
+                                    {% if topic.sourceCount == 1 %}
                                     Quelle
-                                    {% if topic.sourceCount == 1 %}n
+                                    {% else %}
+                                    Quellen
                                     {% endif %}
                                 </h6>
                             </li>

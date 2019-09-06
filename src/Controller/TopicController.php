@@ -8,10 +8,12 @@ use App\Entity\Topic;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use App\Entity\Link;
+use App\Entity\TopicUser;
 use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType as SymfonyTextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class TopicController extends AbstractController
 {
@@ -47,8 +49,30 @@ class TopicController extends AbstractController
             ->getRepository(Topic::class)
             ->find($id);
 
+        if (!$topic) {
+            throw $this->createNotFoundException(
+                'No topic found for id '.$id
+            );
+        }
+
+        $topicUsername = $this->getDoctrine()
+            ->getRepository(TopicUser::Class)
+            ->findOneBy([
+                'user' => $topic->getUser()->getId(),
+                'topic_id' => $topic->getId()]
+            );
+
         $link = new Link();
         $link->setTopic($topic);
+
+
+        $preAliasList = array("Super","Ultra","xXpro","CatLover","Destroyer","Paul","Ben","Dracula",
+                                "Infinity","Valkon","Snow");
+        $postAliasList = array("LP","GamerXx","99","Alpaka","42","Racer","Dangerous","Snicker",
+                                "Forest","Ninja","Dragon");
+
+        $userAlias = new TopicUser();
+        $userAlias->setTopicId($topic);
 
         $linkForm = $this->createFormBuilder($link)
             ->add('href', UrlType::class, [
@@ -62,6 +86,17 @@ class TopicController extends AbstractController
                 'attr' => [
                     'placeholder' => 'Anmerkung eingeben',
                 ],
+            ])
+            ->add('Tags', ChoiceType::class, [
+                'choices'  => [
+                    'Interessant 🤔' => null,
+                    'Informativ 🧐' => true,
+                    'Lustig 🤣' => false,
+                    'Kontrovers 😬' => false,
+                ],
+                'expanded' => true,
+                'multiple' => true,
+                'mapped' => false
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Link hinzufügen',
@@ -80,19 +115,27 @@ class TopicController extends AbstractController
             $this->em->persist($link);
             $this->em->flush();
         }
-        if (!$topic) {
-            throw $this->createNotFoundException(
-                'No topic found for id '.$id
-            );
-        }
 
         $linkForm = $linkForm->createView();
+
+        if ($topicUsername == null)
+        {
+            $pre = mt_rand(0,10);
+            $post = mt_rand(0,10);
+
+            $topicUsername = $preAliasList[$pre] . ' ' . $postAliasList[$post];
+            $userAlias->setUser($topic->getUser());
+            $userAlias->setUsername($topicUsername);
+            $this->em->persist($userAlias);
+            $this->em->flush();
+        }
 
         // or render a template
         // in the template, print things with {{ product.name }}
         return $this->render('default/single-view.html.twig', [
             'topic' => $topic,
             'linkForm' => $linkForm,
+            'TopicUser' => $topicUsername,
         ]);
     }
 }
