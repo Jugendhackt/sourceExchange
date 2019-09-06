@@ -9,7 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use App\Entity\Link;
 use App\Entity\TopicUser;
-use Doctrine\DBAL\Types\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType as SymfonyTextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,6 +38,54 @@ class TopicController extends AbstractController
     public function mytopics()
     {
         return $this->render('default/mytopics.html.twig');
+    }
+
+    /**
+     * @Route("/topic/new", name="topic_new")
+     */
+    public function new(Request $request)
+    {
+        $form = $this->createFormBuilder()
+        ->add('topic', TextType::class, [
+            'label' => 'Titel',
+        ])
+        ->add('description', TextType::class, [
+            'label' => 'Beschreibung',
+        ])
+        ->add('submit', SubmitType::class, [
+            'label' => 'Thema erstellen',
+            'attr' => [
+                'class' => 'btn-success btn-block'
+                ]
+            ])
+        ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $data=$form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $user = $this->getUser();
+
+            $newTopic = new Topic();
+            $newTopic->setTitle($data['topic']);
+            $newTopic->setDescription($data['description']);
+            $newTopic->setUser($user);
+            $newTopic->setTimestamp(new \DateTime);
+
+            $entityManager->persist($newTopic);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('topic_show', ['id' => $newTopic->getId()]);
+
+        }
+
+        return $this->render('topic/new.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**
