@@ -118,8 +118,6 @@ class TopicController extends AbstractController
 
         $linkForm = $linkForm->createView();
 
-        dump($topicUsername);
-
         if ($topicUsername == null)
         {
             $pre = mt_rand(0,10);

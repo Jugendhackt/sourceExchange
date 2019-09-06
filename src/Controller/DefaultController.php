@@ -20,7 +20,6 @@ class DefaultController extends AbstractController
     {
         $topics = $this->topics->findBy([], ['timestamp' => 'ASC']);
         $popularTopics = $this->topics->getTopicsFromLastWeek();
-        dump($popularTopics);
         usort($popularTopics, function ($a, $b)
         {
             return $a->getSourceCount() < $b->getSourceCount();
