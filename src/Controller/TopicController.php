@@ -77,10 +77,19 @@ class TopicController extends AbstractController
             $newTopic->setTimestamp(new \DateTime);
 
             $entityManager->persist($newTopic);
+
+            $topicUser = new TopicUser();
+            $topicUser->setUser($this->getUser());
+            $topicUser->setTopicId($newTopic);
+            $entityManager->persist($topicUser);
             $entityManager->flush();
+            dump($topicUser);
 
-            return $this->redirectToRoute('topic_show', ['id' => $newTopic->getId()]);
-
+            return $this->redirectToRoute(
+                'topic_show', [
+                    'id' => $newTopic->getId()
+                ]
+            );
         }
 
         return $this->render('topic/new.html.twig', [
