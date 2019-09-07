@@ -16,15 +16,13 @@ class TopicUser
      */
     private $id;
 
-
-
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $username;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Topic", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Topic")
      * @ORM\JoinColumn(nullable=false)
      */
     private $topic_id;
