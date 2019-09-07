@@ -9,7 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use App\Entity\Link;
 use App\Entity\TopicUser;
-use Doctrine\DBAL\Types\TextType;
+use App\Repository\TopicUserRepository;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType as SymfonyTextType;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,9 +18,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class TopicController extends AbstractController
 {
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, TopicUserRepository $topicUsers)
     {
         $this->em = $em;
+        $this->topicUsers = $topicUsers;
     }
 
     /**
@@ -41,10 +43,68 @@ class TopicController extends AbstractController
     }
 
     /**
+     * @Route("/topic/new", name="topic_new")
+     */
+    public function new(Request $request)
+    {
+        $form = $this->createFormBuilder()
+        ->add('topic', TextType::class, [
+            'label' => 'Titel',
+        ])
+        ->add('description', TextType::class, [
+            'label' => 'Beschreibung',
+        ])
+        ->add('submit', SubmitType::class, [
+            'label' => 'Thema erstellen',
+            'attr' => [
+                'class' => 'btn-success btn-block'
+                ]
+            ])
+        ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $data=$form->getData();
+
+            $entityManager = $this->getDoctrine()->getManager();
+
+            $user = $this->getUser();
+
+            $newTopic = new Topic();
+            $newTopic->setTitle($data['topic']);
+            $newTopic->setDescription($data['description']);
+            $newTopic->setUser($user);
+            $newTopic->setTimestamp(new \DateTime);
+
+            $entityManager->persist($newTopic);
+
+            $topicUser = new TopicUser();
+            $topicUser->setUser($this->getUser());
+            $topicUser->setTopicId($newTopic);
+            $entityManager->persist($topicUser);
+            $entityManager->flush();
+
+            return $this->redirectToRoute(
+                'topic_show', [
+                    'id' => $newTopic->getId()
+                ]
+            );
+        }
+
+        return $this->render('topic/new.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
      * @Route("/topic/{id}", name="topic_show")
      */
     public function show($id, Request $request)
     {
+        $flushNeeded = false;
+
         $topic = $this->getDoctrine()
             ->getRepository(Topic::class)
             ->find($id);
@@ -55,22 +115,8 @@ class TopicController extends AbstractController
             );
         }
 
-        $topicUsername = $this->getDoctrine()
-            ->getRepository(TopicUser::Class)
-            ->findOneBy([
-                'user' => $topic->getUser()->getId(),
-                'topic_id' => $topic->getId()]
-            );
-
         $link = new Link();
         $link->setTopic($topic);
-
-
-        $preAliasList = array("Super","Ultra","xXpro","CatLover","Destroyer","Paul","Ben","Dracula",
-                                "Infinity","Valkon","Snow");
-        $postAliasList = array("LP","GamerXx","99","Alpaka","42","Racer","Dangerous","Snicker",
-                                "Forest","Ninja","Dragon");
-
         $userAlias = new TopicUser();
         $userAlias->setTopicId($topic);
 
@@ -115,27 +161,65 @@ class TopicController extends AbstractController
             $this->em->persist($link);
             $this->em->flush();
         }
-
         $linkForm = $linkForm->createView();
 
-        if ($topicUsername == null)
-        {
-            $pre = mt_rand(0,10);
-            $post = mt_rand(0,10);
+        $topicUser = $this->topicUsers->findOneBy([
+            'user' => $topic->getUser()->getId(),
+            'topic_id' => $topic->getId()
+        ]);
 
-            $topicUsername = $preAliasList[$pre] . ' ' . $postAliasList[$post];
-            $userAlias->setUser($topic->getUser());
-            $userAlias->setUsername($topicUsername);
-            $this->em->persist($userAlias);
+        if ($topicUser === null)
+        {
+            // Workaround for legacy topics where no username was generated on topic creation
+
+            $topicUser = new TopicUser();
+            $topicUser->setTopicId($topic);
+            $topicUser->setUser($topic->getUser());
+            $this->em->persist($topicUser);
             $this->em->flush();
         }
 
-        // or render a template
-        // in the template, print things with {{ product.name }}
+        $userTopicUsernameMap = [];
+        $userTopicUsernameMap[$topic->getUser()->getId()] = $topicUser;
+
+        foreach ($topic->getLinks() as $link)
+        {
+            $linkUser = $link->getUser();
+            if (isset($userTopicUsernameMap[$linkUser->getId()]))
+            {
+                continue;
+            }
+
+            $topicUser = $this->topicUsers->findOneBy([
+                'user' => $linkUser->getId(),
+                'topic_id' => $topic->getId(),
+            ]);
+
+            if ($topicUser instanceof TopicUser)
+            {
+                $userTopicUsernameMap[$linkUser->getId()] = $topicUser;
+                continue;
+            }
+
+            $topicUser = new TopicUser();
+            $topicUser->setTopicId($topic);
+            $topicUser->setUser($linkUser);
+            $this->em->persist($topicUser);
+            $flushNeeded = true;
+
+            $userTopicUsernameMap[$linkUser->getId()] = $topicUser;
+        }
+
+        // Do not flush for every single new TopicUser
+        if ($flushNeeded)
+        {
+            $this->em->flush();
+        }
+
         return $this->render('default/single-view.html.twig', [
             'topic' => $topic,
             'linkForm' => $linkForm,
-            'TopicUser' => $topicUsername,
+            'topicUserMap' => $userTopicUsernameMap,
         ]);
     }
 }

@@ -16,15 +16,13 @@ class TopicUser
      */
     private $id;
 
-
-
     /**
      * @ORM\Column(type="string", length=255)
      */
     private $username;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Topic", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Topic")
      * @ORM\JoinColumn(nullable=false)
      */
     private $topic_id;
@@ -35,7 +33,54 @@ class TopicUser
      */
     private $user;
 
-    
+    public function __construct()
+    {
+        $preAliasList = [
+            "Super",
+            "Ultra",
+            "xXpro",
+            "CatLover",
+            "Destroyer",
+            "Paul",
+            "Ben",
+            "Dracula",
+            "Infinity",
+            "Valkon",
+            "Snow"
+        ];
+
+        $connectors = [
+            '_',
+            'x',
+            'xXx',
+            '-',
+            '.',
+            ' ',
+            ''
+        ];
+
+        $postAliasList = [
+            "LP",
+            "GamerXx",
+            "99",
+            "Alpaka",
+            "42",
+            "Racer",
+            "Dangerous",
+            "Snicker",
+            "Forest",
+            "Ninja",
+            "Dragon"
+        ];
+
+        $firstPart = $preAliasList[mt_rand(0, count($preAliasList) - 1)];
+        $connector = $connectors[mt_rand(0, count($connectors) - 1)];
+        $lastPart = $postAliasList[mt_rand(0, count($postAliasList) - 1)];
+
+        $username = $firstPart . $connector . $lastPart;
+
+        $this->setUsername($username);
+    }
 
     public function getId(): ?int
     {
@@ -78,5 +123,5 @@ class TopicUser
         return $this;
     }
 
-    
+
 }

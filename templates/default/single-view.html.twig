@@ -30,10 +30,8 @@
                                         {{ link.href }}
                                     </a>
                                     <p class="text-muted"> {{ link.description }} </p>
-                                    {% if TopicUser.username is defined %}
-                                        <p class="text-muted">Von {{ TopicUser.username }}</p>
-                                    {% else %}
-                                        <p class="text-muted">Von {{ TopicUser }}</p>
+                                    {% if topicUserMap[link.user.id] is defined %}
+                                        <p class="text-muted">Von {{ topicUserMap[link.user.id].username }}</p>
                                     {% endif %}
                                     <button type="button" class="btn btn-outline-danger report-button float-right">Melden</button>
                                 </li>
